@@ -8,6 +8,62 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Date-Time Picker ── */
+    .dt-picker {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    .dt-picker select,
+    .dt-picker input[type="number"] {
+      padding: 12px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(229,231,235,0.1);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: 'Manrope', sans-serif;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      text-align: center;
+    }
+    .dt-picker select:focus,
+    .dt-picker input[type="number"]:focus {
+      border-color: rgba(124,58,237,0.5);
+      background: rgba(124,58,237,0.05);
+    }
+    .dt-picker select option { background: #1e1b4b; color: var(--text); }
+    .dt-label-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .dt-label-row span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-align: center;
+    }
+    .dt-preview {
+      margin-top: 8px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(196,181,253,0.15);
+      font-size: 0.85rem;
+      color: #c4b5fd;
+      font-weight: 600;
+      min-height: 34px;
+    }
+    .dt-preview.empty { color: var(--muted); font-weight: 400; font-style: italic; }
+  </style>
 </head>
 <body data-page="gatepass">
   <div class="app-layout">
@@ -23,24 +79,71 @@
         <a href="holidays.html"><span class="nav-icon">📅</span> Holidays</a>
         <a href="feedback.html"><span class="nav-icon">⭐</span> Food Feedback</a>
       </nav>
-      <div class="sidebar-footer"><a href="login.html" class="action-btn secondary-btn" style="width:100%;justify-content:center;border-radius:14px;">🚪 Logout</a></div>
+      <div class="sidebar-footer">
+        <a href="login.html" class="action-btn secondary-btn" style="width:100%;justify-content:center;border-radius:14px;">🚪 Logout</a>
+      </div>
     </aside>
+
     <main class="content-area two-col">
       <section class="panel">
         <p class="eyebrow">Request Exit</p>
         <h1>Gate Pass Application</h1>
         <p class="panel-note">Fill in your exit details and submit. The admin will verify with your parent before approving. You can track the status on the right.</p>
+
         <form id="gatepassForm" class="stack-form">
-          <label><span>Student Name</span><input type="text" name="studentName" placeholder="Full name" required style="opacity:0.7;cursor:not-allowed;"></label>
-          <label><span>Room Number</span><input type="text" name="roomNumber" placeholder="e.g. A-204" required style="opacity:0.7;cursor:not-allowed;"></label>
-          <label><span>Out Time</span><input type="datetime-local" name="outTime" required></label>
-          <label><span>Return Time</span><input type="datetime-local" name="returnTime" required></label>
-          <label><span>Parent Phone</span><input type="tel" name="parentPhone" placeholder="+91 98765 43210" required></label>
-          <label><span>Reason for Exit</span><textarea name="reason" rows="3" placeholder="Purpose of going out..." required></textarea></label>
+          <!-- Hidden actual datetime values submitted to server -->
+          <input type="hidden" name="outTime" id="outTimeValue">
+          <input type="hidden" name="returnTime" id="returnTimeValue">
+
+          <label><span>Student Name</span>
+            <input type="text" name="studentName" id="studentName" placeholder="Full name" required>
+          </label>
+
+          <label><span>Room Number</span>
+            <input type="text" name="roomNumber" id="roomNumber" placeholder="e.g. A-204" required>
+          </label>
+
+          <!-- Out Date & Time -->
+          <div>
+            <span style="font-size:0.9rem;font-weight:500;color:var(--muted);display:block;margin-bottom:8px;">📅 Out Date &amp; Time</span>
+            <div class="dt-label-row">
+              <span>Date</span><span>Hour</span><span>Minute</span>
+            </div>
+            <div class="dt-picker" id="outPicker">
+              <input type="date" id="outDate" min="" style="padding:12px 10px;border-radius:14px;border:1px solid rgba(229,231,235,0.1);background:rgba(255,255,255,0.04);color:var(--text);font-size:0.9rem;font-family:'Manrope',sans-serif;width:100%;outline:none;cursor:pointer;" required>
+              <select id="outHour"></select>
+              <select id="outMinute"></select>
+            </div>
+            <div class="dt-preview empty" id="outPreview">Select date and time</div>
+          </div>
+
+          <!-- Return Date & Time -->
+          <div>
+            <span style="font-size:0.9rem;font-weight:500;color:var(--muted);display:block;margin-bottom:8px;">🔙 Return Date &amp; Time</span>
+            <div class="dt-label-row">
+              <span>Date</span><span>Hour</span><span>Minute</span>
+            </div>
+            <div class="dt-picker" id="returnPicker">
+              <input type="date" id="returnDate" min="" style="padding:12px 10px;border-radius:14px;border:1px solid rgba(229,231,235,0.1);background:rgba(255,255,255,0.04);color:var(--text);font-size:0.9rem;font-family:'Manrope',sans-serif;width:100%;outline:none;cursor:pointer;" required>
+              <select id="returnHour"></select>
+              <select id="returnMinute"></select>
+            </div>
+            <div class="dt-preview empty" id="returnPreview">Select date and time</div>
+          </div>
+
+          <label><span>Parent Phone</span>
+            <input type="tel" name="parentPhone" id="parentPhone" placeholder="+91 98765 43210">
+          </label>
+
+          <label><span>Reason for Exit</span>
+            <textarea name="reason" rows="3" placeholder="Purpose of going out..." required></textarea>
+          </label>
+
           <button type="submit" class="primary-btn" style="justify-content:center;">🚪 Submit Request</button>
         </form>
         <p id="gatepassMessage" class="inline-message"></p>
       </section>
+
       <section class="panel">
         <p class="eyebrow">Approval Trail</p>
         <h2>Gate Pass Status</h2>
@@ -48,6 +151,108 @@
       </section>
     </main>
   </div>
+
   <script src="js/script.js"></script>
+  <script>
+    /* ── Populate hour and minute dropdowns ── */
+    function populateDropdowns(hourSel, minuteSel) {
+      for (let h = 0; h < 24; h++) {
+        const ampm = h < 12 ? 'AM' : 'PM';
+        const h12  = h === 0 ? 12 : h > 12 ? h - 12 : h;
+        const opt  = document.createElement('option');
+        opt.value  = String(h).padStart(2, '0');
+        opt.textContent = String(h12).padStart(2, '0') + ' ' + ampm;
+        hourSel.appendChild(opt);
+      }
+      [['00','00 min'],['15','15 min'],['30','30 min'],['45','45 min']].forEach(([v, label]) => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = label;
+        minuteSel.appendChild(opt);
+      });
+    }
+
+    const outHour   = document.getElementById('outHour');
+    const outMin    = document.getElementById('outMinute');
+    const retHour   = document.getElementById('returnHour');
+    const retMin    = document.getElementById('returnMinute');
+    const outDate   = document.getElementById('outDate');
+    const retDate   = document.getElementById('returnDate');
+
+    populateDropdowns(outHour, outMin);
+    populateDropdowns(retHour, retMin);
+
+    // Set default hour to current hour
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    outDate.min = todayStr;
+    retDate.min = todayStr;
+    outDate.value = todayStr;
+    retDate.value = todayStr;
+    outHour.value = String(now.getHours()).padStart(2, '0');
+    outMin.value  = '00';
+    retHour.value = String((now.getHours() + 2) % 24).padStart(2, '0');
+    retMin.value  = '00';
+
+    /* ── Format preview label ── */
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    function buildPreview(dateStr, h, m) {
+      if (!dateStr) return null;
+      const d = new Date(dateStr + 'T00:00:00');
+      const hNum = parseInt(h, 10);
+      const ampm = hNum < 12 ? 'AM' : 'PM';
+      const h12  = hNum === 0 ? 12 : hNum > 12 ? hNum - 12 : hNum;
+      return `${DAYS[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()} — ${String(h12).padStart(2,'0')}:${m} ${ampm}`;
+    }
+
+    function buildISO(dateStr, h, m) {
+      if (!dateStr) return '';
+      return `${dateStr}T${h}:${m}`;
+    }
+
+    function updateOut() {
+      const preview = buildPreview(outDate.value, outHour.value, outMin.value);
+      const el = document.getElementById('outPreview');
+      if (preview) { el.textContent = '🚪 ' + preview; el.classList.remove('empty'); }
+      else          { el.textContent = 'Select date and time'; el.classList.add('empty'); }
+      document.getElementById('outTimeValue').value = buildISO(outDate.value, outHour.value, outMin.value);
+      // Keep return date min in sync
+      if (outDate.value) retDate.min = outDate.value;
+    }
+
+    function updateReturn() {
+      const preview = buildPreview(retDate.value, retHour.value, retMin.value);
+      const el = document.getElementById('returnPreview');
+      if (preview) { el.textContent = '🔙 ' + preview; el.classList.remove('empty'); }
+      else          { el.textContent = 'Select date and time'; el.classList.add('empty'); }
+      document.getElementById('returnTimeValue').value = buildISO(retDate.value, retHour.value, retMin.value);
+    }
+
+    [outDate, outHour, outMin].forEach(el => el.addEventListener('change', updateOut));
+    [retDate, retHour, retMin].forEach(el => el.addEventListener('change', updateReturn));
+
+    // Init previews
+    updateOut();
+    updateReturn();
+
+    /* ── Validate before submit ── */
+    document.getElementById('gatepassForm').addEventListener('submit', function(e) {
+      const out = document.getElementById('outTimeValue').value;
+      const ret = document.getElementById('returnTimeValue').value;
+      if (!out || !ret) {
+        e.preventDefault();
+        document.getElementById('gatepassMessage').textContent = 'Please select both out and return date/time.';
+        document.getElementById('gatepassMessage').style.color = '#fda4af';
+        return;
+      }
+      if (new Date(ret) <= new Date(out)) {
+        e.preventDefault();
+        document.getElementById('gatepassMessage').textContent = 'Return time must be after out time.';
+        document.getElementById('gatepassMessage').style.color = '#fda4af';
+      }
+    }, true); // capture phase — runs before script.js submit handler
+  </script>
 </body>
 </html>

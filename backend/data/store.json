@@ -2,7 +2,7 @@
   "students": [
     {
       "userId": "STU1001",
-      "password": "nevermore123",
+      "password": "$2b$10$6CoeiWGRRSNt6d0HGkcok.v97hsJSTGxsMFvM0HNvvHfnpkVN0uNK",
       "role": "student",
       "name": "Aarav D'Souza",
       "roomNumber": "A-204",
@@ -12,7 +12,7 @@
     },
     {
       "userId": "STU1002",
-      "password": "pass123",
+      "password": "$2b$10$KiBBt7fcOzVl4eLHoQBQN.2bUgGBbhgDbKtLFXb85cWP3L0sEoFPG",
       "role": "student",
       "name": "Pavithra",
       "roomNumber": "28",
@@ -22,7 +22,7 @@
     },
     {
       "userId": "STU1003",
-      "password": "pass456",
+      "password": "$2b$10$Tho/mMY8GkAoRxvXotSbdeB1EKI./sJdA3jSlz2wQYBNGPw3vH0qO",
       "role": "student",
       "name": "Subitha",
       "roomNumber": "29",
@@ -32,7 +32,7 @@
     },
     {
       "userId": "205119",
-      "password": "pavi123",
+      "password": "$2b$10$cbqa7t7ViiSVpS7LCGnNNewHo5jZv4f2g.0A9LFV98dEsEN73JSL.",
       "role": "student",
       "name": "Pavithra",
       "roomNumber": "28",
@@ -42,7 +42,7 @@
     },
     {
       "userId": "205159",
-      "password": "subi123",
+      "password": "$2b$10$dhzvMs1LKgJ80YeZU3J74.a1CUvmCU1rMcVzWIw4PJlRf3IwXGdce",
       "role": "student",
       "name": "Subitha",
       "roomNumber": "29",
@@ -54,7 +54,7 @@
   "admins": [
     {
       "userId": "ADMIN01",
-      "password": "ravens@123",
+      "password": "$2b$10$ZKdEgGAZPDWD56oav/e4geZ2xKPvRuCb/twIb5NTdEio/jWVH5Wa.",
       "role": "admin",
       "name": "Warden Ophelia"
     }
@@ -105,6 +105,32 @@
   ],
   "complaints": [
     {
+      "id": "CMP006",
+      "studentName": "Pavithra",
+      "roomNumber": "28",
+      "complaintType": "Water",
+      "issueDescription": "No hot water",
+      "priority": 3,
+      "status": "Pending",
+      "resolved": false,
+      "assuranceDate": null,
+      "escalated": false,
+      "createdAt": "2026-07-13T12:32:46.712Z"
+    },
+    {
+      "id": "CMP005",
+      "studentName": "Pavithra",
+      "roomNumber": "28",
+      "complaintType": "Water",
+      "issueDescription": "No hot water in bathroom",
+      "priority": 3,
+      "status": "Pending",
+      "resolved": false,
+      "assuranceDate": null,
+      "escalated": false,
+      "createdAt": "2026-07-13T12:32:32.568Z"
+    },
+    {
       "id": "CMP004",
       "roomNumber": "101",
       "complaintType": "Electrical",
@@ -140,6 +166,23 @@
   ],
   "gatePasses": [
     {
+      "id": "GP005",
+      "studentName": "Pavithra",
+      "roomNumber": "28",
+      "outTime": "2026-07-13T02:45",
+      "returnTime": "9877-09-07T22:00",
+      "reason": "fever",
+      "parentPhone": "6381693992",
+      "status": "Pending",
+      "parentApproval": "Pending",
+      "parentVerification": "Pending",
+      "adminApproval": "Approved",
+      "approvalToken": "bbae0169dc580da9548f5107b02a9d5c",
+      "approvalLink": "http://localhost:3000/parent-approval.html?type=gatepass&token=bbae0169dc580da9548f5107b02a9d5c",
+      "qrCode": "",
+      "createdAt": "2026-07-13T15:26:34.337Z"
+    },
+    {
       "id": "GP004",
       "studentName": "Subitha",
       "roomNumber": "28",
@@ -147,13 +190,13 @@
       "returnTime": "2026-04-08T08:30",
       "reason": "fever",
       "parentPhone": "8807149866",
-      "status": "Pending",
+      "status": "Approved",
       "parentApproval": "Approved",
       "parentVerification": "Call Initiated",
-      "adminApproval": "Pending",
+      "adminApproval": "Approved",
       "approvalToken": "b64cdf121503f93518b99181b32e91c6",
       "approvalLink": "http://localhost:3000/parent-approval.html?type=gatepass&token=b64cdf121503f93518b99181b32e91c6",
-      "qrCode": "",
+      "qrCode": "data:image/png;base64,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",
       "createdAt": "2026-04-06T06:15:44.096Z",
       "callSid": "SIM-1775811814548",
       "callMode": "simulation"

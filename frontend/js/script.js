@@ -30,9 +30,15 @@ function formatDate(value) {
 }
 
 async function api(url, options = {}) {
-  const res = await fetch(url, { headers: { "Content-Type": "application/json" }, ...options });
+  const session = getSession();
+  const headers = { "Content-Type": "application/json", ...options.headers };
+  if (session?.userId) headers["x-user-id"] = session.userId;
+  const res = await fetch(url, { ...options, headers });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Request failed");
+  if (!res.ok) {
+    if (res.status === 401) { window.location.href = "login.html"; return; }
+    throw new Error(data.message || "Request failed");
+  }
   return data;
 }
 
