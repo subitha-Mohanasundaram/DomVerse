@@ -2,7 +2,7 @@
 
 ### Smart Hostel Management System
 
-> **DomVerse** is a modern Hostel Management System that digitizes hostel operations by providing a centralized platform for students and administrators. It replaces manual paperwork with an efficient, secure, and user-friendly web application.
+> **DomVerse** is a modern Hostel Management System that digitizes hostel operations by providing a centralized platform for students and administrators. It replaces manual paperwork with an efficient, secure, and user-friendly web application.         
 
 ---
 
