@@ -39,7 +39,7 @@ The goal of DomVerse is to create a smart digital ecosystem that improves effici
 * Holiday Management
 * Mess Menu Management
 * Feedback Management
-* Dashboard Overview
+* Dashboard 
 
 ---
 
